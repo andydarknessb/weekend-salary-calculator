@@ -16,9 +16,14 @@ function addEmployee() {
     const idNumber = document.getElementById('idNumber').value;
     const jobTitle = document.getElementById('jobTitle').value;
     const annualSalary = parseFloat(document.getElementById('annualSalary').value);
-  
+
+    if (!firstName || !lastName || !idNumber || !jobTitle || !annualSalary) {
+        alert('Please fill out all fields.');
+        return;
+    }
+
     employees.push({ firstName, lastName, idNumber, jobTitle, annualSalary });
-  
+
     const row = table.insertRow();
     const cellFirstName = row.insertCell(0);
     const cellLastName = row.insertCell(1);
@@ -30,27 +35,28 @@ function addEmployee() {
     cellLastName.innerHTML = lastName;
     cellIdNumber.innerHTML = idNumber;
     cellJobTitle.innerHTML = jobTitle;
-  
+
     const annualSalaryFormatted = annualSalary.toLocaleString('en-US');
     cellAnnualSalary.innerHTML = '$' + annualSalaryFormatted;
-  
+
     document.getElementById('firstName').value = '';
     document.getElementById('lastName').value = '';
     document.getElementById('idNumber').value = '';
     document.getElementById('jobTitle').value = '';
     document.getElementById('annualSalary').value = '';
-  
+
     cellDeleteButton.innerHTML = '<button class="deleteButton">Delete</button>';
     const deleteButton = cellDeleteButton.querySelector('.deleteButton');
     deleteButton.addEventListener('click', function () {
-      const index = employees.findIndex((employee) => employee.idNumber === idNumber);
-      employees.splice(index, 1);
-      table.deleteRow(row.rowIndex);
-      updateMonthlyCost();
+        const index = employees.findIndex((employee) => employee.idNumber === idNumber);
+        employees.splice(index, 1);
+        table.deleteRow(row.rowIndex);
+        updateMonthlyCost();
     });
-  
+
     updateMonthlyCost();
-  }
+}
+
 
 function updateMonthlyCost(salaryToRemove = 0) {
     const totalSalary = employees.reduce(function(acc, cur) {
@@ -64,6 +70,10 @@ function updateMonthlyCost(salaryToRemove = 0) {
     } else {
       monthlyCost.style.backgroundColor = 'white';
 
-
-    }
+    const row = table.insertRow();
+    const cellTotalLabel = row.insertCell(0);
+    cellTotalLabel.innerHTML = 'Total Monthly Cost:';
+    const cellTotal = row.insertCell(1);
+    cellTotal.id = 'total';
+}
   }
