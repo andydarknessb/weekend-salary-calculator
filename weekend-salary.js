@@ -8,6 +8,7 @@ const monthlyCost = document.getElementById('monthlyCost');
 const addButton = document.getElementById('addButton');
 addButton.addEventListener('click', addEmployee);
 
+
 function addEmployee() {
     const firstName = document.getElementById('firstName').value;
     const lastName = document.getElementById('lastName').value;
@@ -15,13 +16,12 @@ function addEmployee() {
     const jobTitle = document.getElementById('jobTitle').value;
     const annualSalary = parseFloat(document.getElementById('annualSalary').value);
 
-    if (!firstName || !lastName || !idNumber || !jobTitle || !annualSalary) {
+    if (!firstName || !lastName || !idNumber || !jobTitle || !annualSalary) { // Added this to ensure all fields were filled before submitting. Will alert user to fill all fields. 
         alert('Please fill out all fields.');
         return;
     }
 
-    employees.push({ firstName, lastName, idNumber, jobTitle, annualSalary });
-
+    employees.push({ firstName, lastName, idNumber, jobTitle, annualSalary }); 
     const row = table.insertRow();
     const cellFirstName = row.insertCell(0);
     const cellLastName = row.insertCell(1);
@@ -56,10 +56,11 @@ function addEmployee() {
         updateMonthlyCost(0);
     }
 });
-
-      
+     
 updateMonthlyCost(annualSalary);
-    // show all placeholders
+    
+// Added this to reset placeholder after every submission
+
     document.getElementById('firstName').value = '';
     document.getElementById('firstName').placeholder = 'First Name';
     document.getElementById('lastName').value = '';
@@ -71,7 +72,6 @@ updateMonthlyCost(annualSalary);
     document.getElementById('annualSalary').value = '';
     document.getElementById('annualSalary').placeholder = 'Annual Salary';
 }
-
 
 
 function updateMonthlyCost() {
