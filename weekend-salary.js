@@ -1,7 +1,6 @@
 console.log ("Hello World");
 
 let employees = [];
-let totalRow;
 
 const table = document.querySelector('table');
 const monthlyCost = document.getElementById('monthlyCost');
@@ -47,16 +46,19 @@ function addEmployee() {
     cellDeleteButton.innerHTML = '<button class="deleteButton" data-salary="' + annualSalary + '">Delete</button>';
     const deleteButton = cellDeleteButton.querySelector('.deleteButton');
     deleteButton.addEventListener('click', function () {
-        const index = employees.findIndex((employee) => employee.idNumber === idNumber);
-        employees.splice(index, 1);
-        table.deleteRow(row.rowIndex);
-        const salary = parseFloat(deleteButton.getAttribute('data-salary'));
-        const monthlySalary = -(salary / 12);
-        updateMonthlyCost(monthlySalary);
-    });
-    
+    const index = employees.findIndex((employee) => employee.idNumber === idNumber);
+    employees.splice(index, 1);
+    table.deleteRow(row.rowIndex);
+    const salary = parseFloat(deleteButton.getAttribute('data-salary'));
+    const monthlySalary = salary / 12;
+    updateMonthlyCost(-monthlySalary);
+    if (employees.length === 0) {
+        updateMonthlyCost(0);
+    }
+});
 
-    updateMonthlyCost();
+      
+updateMonthlyCost(annualSalary);
     // show all placeholders
     document.getElementById('firstName').value = '';
     document.getElementById('firstName').placeholder = 'First Name';
@@ -68,22 +70,27 @@ function addEmployee() {
     document.getElementById('jobTitle').placeholder = 'Job Title';
     document.getElementById('annualSalary').value = '';
     document.getElementById('annualSalary').placeholder = 'Annual Salary';
-
 }
 
 
-function updateMonthlyCost(salaryToRemove = 0) {
-    const totalSalary = employees.reduce(function(acc, cur) {
-        return acc + cur.annualSalary;
-    }, 0) - salaryToRemove;
-    const monthlySalary = (totalSalary / 12).toLocaleString('en-US', {style: 'currency', currency: 'USD', minimumFractionDigits: 2});
-    monthlyCost.innerHTML = monthlySalary;
 
-    if (totalSalary > 240000) {
-        monthlyCost.style.backgroundColor = 'red';
+function updateMonthlyCost() {
+    let totalMonthlyCost = 0;
+    employees.forEach(function(employee) {
+      const monthlySalary = employee.annualSalary / 12;
+      totalMonthlyCost += monthlySalary;
+    });
+  
+    const monthlyCostFormatted = totalMonthlyCost.toLocaleString('en-US', {style: 'currency', currency: 'USD', minimumFractionDigits: 2});
+    monthlyCost.innerHTML = monthlyCostFormatted;
+  
+    if (totalMonthlyCost > 20000) {
+      monthlyCost.style.backgroundColor = 'red';
     } else {
-        monthlyCost.style.backgroundColor = 'white';
+      monthlyCost.style.backgroundColor = 'white';
     }
-}
+  }
+  
+
 
 
